@@ -5,6 +5,7 @@ from kivy.core.window import Window
 from kivy.config import Config
 from kivy.uix.boxlayout import BoxLayout
 from kivy.clock import Clock
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 
 def interpolate(f_co, t_co, interval):
@@ -15,28 +16,89 @@ def interpolate(f_co, t_co, interval):
 
 KV = '''
 #:import Window kivy.core.window.Window
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
 <BG>:
 	orientation: "vertical"
 	Image:
 		id: bg
 		source: 'bg.png'
-Screen:
-	id: main_screen
-	BG:
+<Cards>:
+    canvas:
+        Color:
+            rgba: (0.576, 0.721, 0.411, 0.25)
+        RoundedRectangle:
+            pos: Window.size[0]*0.0694, Window.size[1]*0.2578
+            size: Window.size[0]*0.861, Window.size[1]*0.4843
+            radius: [22]
+        Color:
+            rgba: (0.5764, 0.7215, 0.4117, 0.5)
+        RoundedRectangle:
+            pos: 0, 0
+            size: Window.size[0], Window.size[1]*0.1171
+            radius: [22,22,0,0]
+<Lose_Screen>:
+    BG:
     FloatLayout:
-        canvas:
-            Color:
-                rgba: (0.576, 0.721, 0.411, 0.25)
-            RoundedRectangle:
-                pos: Window.size[0]*0.0694, Window.size[1]*0.2578
-                size: Window.size[0]*0.861, Window.size[1]*0.4843
-                radius: [22]
-            Color:
-                rgba: (0.5764, 0.7215, 0.4117, 0.5)
-            RoundedRectangle:
-                pos: 0, 0
-                size: Window.size[0], Window.size[1]*0.1171
-                radius: [22,22,0,0]
+        orientation: "vertical"
+        Cards:
+        Label:
+            text: "Tic - Tac - Toe"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.882}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.917, 0.929, 0.901, 0.75)
+            font_size: Window.size[0]*0.133
+        Label:
+            text: "YOU LOST!"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.5}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.337, 0.564, 0.58, 1)
+            font_size: Window.size[0]*0.2
+        Label:
+            text: "BACK"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.0585}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.337, 0.564, 0.58, 0.5)
+            font_size: Window.size[0]*0.133
+<Win_Screen>:
+    BG:
+    FloatLayout:
+        orientation: "vertical"
+        Cards:
+        Label:
+            text: "Tic - Tac - Toe"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.882}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.917, 0.929, 0.901, 0.75)
+            font_size: Window.size[0]*0.133
+        Label:
+            text: "YOU WON!"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.5}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.337, 0.564, 0.58, 1)
+            font_size: Window.size[0]*0.2
+        Label:
+            text: "BACK"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.0585}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.337, 0.564, 0.58, 0.5)
+            font_size: Window.size[0]*0.133
+<Main_Screen>:
+    BG:
+    FloatLayout:
+        orientation: "vertical"
+        Cards:
         Label:
             text: "Tic - Tac - Toe"
             markup: True
@@ -53,6 +115,73 @@ Screen:
             font_name: "Marvel-Bold"
             color: (0.337, 0.564, 0.58, 0.5)
             font_size: Window.size[0]*0.133
+        Image:
+            id: grid
+            source: 'grid.png'
+            size_hint_x: None
+            width: Window.size[0]*0.75
+            pos:  Window.size[0]*0.12, 0
+ScreenManager:
+    id: screen_manager
+    transition: FadeTransition(duration=.15)
+    Main_Screen:
+        id: main_screen
+        manager: screen_manager
+        name: "main"
+        GridLayout:
+            cols: 1
+            Label:
+            Label:
+            Label:
+            Label:
+            Button:
+                text: "Hello"
+                on_press: screen_manager.current="win"
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+    Win_Screen:
+        id: win_screen
+        manager: screen_manager
+        name: "win"
+        GridLayout:
+            cols: 1
+            Label:
+            Label:
+            Label:
+            Label:
+            Button:
+                text: "Hello"
+                on_press: screen_manager.current="lose"
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+    Lose_Screen:
+        id: lose_screen
+        manager: screen_manager
+        name: "lose"
+        GridLayout:
+            cols: 1
+            Label:
+            Label:
+            Label:
+            Label:
+            Button:
+                text: "Hello"
+                on_press: screen_manager.current="main"
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+            Label:
+    
 '''
 
 
@@ -74,7 +203,22 @@ class BG(BoxLayout):
             gradient.save(f)
         self.ids.bg.source = 'bg.png'
         self.ids.bg.reload()
+    
+class Cards(BoxLayout):
+    def __init__(self, **kwargs):
+        super(Cards, self).__init__(**kwargs)
 
+class Main_Screen(Screen):
+    def __init__(self, **kwargs):
+        super(Main_Screen, self).__init__(**kwargs)
+
+class Win_Screen(Screen):
+    def __init__(self, **kwargs):
+        super(Win_Screen, self).__init__(**kwargs)
+
+class Lose_Screen(Screen):
+    def __init__(self, **kwargs):
+        super(Lose_Screen, self).__init__(**kwargs)
 
 class MainApp(App):
     def build(self):
