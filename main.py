@@ -14,7 +14,8 @@ def interpolate(f_co, t_co, interval):
 
 
 KV = '''
-<BG@BoxLayout>:
+#:import Window kivy.core.window.Window
+<BG>:
 	orientation: "vertical"
 	Image:
 		id: bg
@@ -22,6 +23,36 @@ KV = '''
 Screen:
 	id: main_screen
 	BG:
+    FloatLayout:
+        canvas:
+            Color:
+                rgba: (0.576, 0.721, 0.411, 0.25)
+            RoundedRectangle:
+                pos: Window.size[0]*0.0694, Window.size[1]*0.2578
+                size: Window.size[0]*0.861, Window.size[1]*0.4843
+                radius: [22]
+            Color:
+                rgba: (0.5764, 0.7215, 0.4117, 0.5)
+            RoundedRectangle:
+                pos: 0, 0
+                size: Window.size[0], Window.size[1]*0.1171
+                radius: [22,22,0,0]
+        Label:
+            text: "Tic - Tac - Toe"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.882}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.917, 0.929, 0.901, 0.75)
+            font_size: Window.size[0]*0.133
+        Label:
+            text: "RESET"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.0585}
+            size_hint_x: None
+            font_name: "Marvel-Bold"
+            color: (0.337, 0.564, 0.58, 0.5)
+            font_size: Window.size[0]*0.133
 '''
 
 
@@ -47,6 +78,7 @@ class BG(BoxLayout):
 
 class MainApp(App):
     def build(self):
+        Window.size = (360, 640)
         return Builder.load_string(KV)
 
 
