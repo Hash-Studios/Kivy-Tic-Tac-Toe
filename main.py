@@ -66,7 +66,7 @@ class Main_Screen(Screen):
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
-        if touch.spos[1] < 0.118:  # Bottom Button
+        if touch.spos[1] < 0.118:           # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
                 Clock.schedule_once(partial(self.set_opacity, self.x_1), 0)
@@ -89,6 +89,153 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.o_9), 1.2)
                 main_app.board = [" "]*10
                 return False
+
+        # 1st button
+        if 0.15 < touch.spos[0] < 0.355 and 0.576 < touch.spos[1] < 0.696:
+            if main_app.board[1] == "X":
+                main_app.board[1] = "O"
+                self.x_1.opacity = 0
+                self.o_1.opacity = 1
+            elif main_app.board[1] == "O":
+                main_app.board[1] = "X"
+                self.x_1.opacity = 1
+                self.o_1.opacity = 0
+            else:
+                main_app.board[1] = "X"
+                self.x_1.opacity = 1
+                self.o_1.opacity = 0
+            return False
+
+        # 2nd button
+        if 0.380 < touch.spos[0] < 0.611 and 0.576 < touch.spos[1] < 0.696:
+            if main_app.board[2] == "X":
+                main_app.board[2] = "O"
+                self.x_2.opacity = 0
+                self.o_2.opacity = 1
+            elif main_app.board[2] == "O":
+                main_app.board[2] = "X"
+                self.x_2.opacity = 1
+                self.o_2.opacity = 0
+            else:
+                main_app.board[2] = "X"
+                self.x_2.opacity = 1
+                self.o_2.opacity = 0
+            return False
+        
+        # 3rd button
+        if 0.633 < touch.spos[0] < 0.847 and 0.576 < touch.spos[1] < 0.696:
+            if main_app.board[3] == "X":
+                main_app.board[3] = "O"
+                self.x_3.opacity = 0
+                self.o_3.opacity = 1
+            elif main_app.board[3] == "O":
+                main_app.board[3] = "X"
+                self.x_3.opacity = 1
+                self.o_3.opacity = 0
+            else:
+                main_app.board[3] = "X"
+                self.x_3.opacity = 1
+                self.o_3.opacity = 0
+            return False
+        
+        # 4th button
+        if 0.15 < touch.spos[0] < 0.355 and 0.437 < touch.spos[1] < 0.567:
+            if main_app.board[4] == "X":
+                main_app.board[4] = "O"
+                self.x_4.opacity = 0
+                self.o_4.opacity = 1
+            elif main_app.board[4] == "O":
+                main_app.board[4] = "X"
+                self.x_4.opacity = 1
+                self.o_4.opacity = 0
+            else:
+                main_app.board[4] = "X"
+                self.x_4.opacity = 1
+                self.o_4.opacity = 0
+            return False
+
+        # 5th button
+        if 0.380 < touch.spos[0] < 0.611 and 0.437 < touch.spos[1] < 0.567:
+            if main_app.board[5] == "X":
+                main_app.board[5] = "O"
+                self.x_5.opacity = 0
+                self.o_5.opacity = 1
+            elif main_app.board[5] == "O":
+                main_app.board[5] = "X"
+                self.x_5.opacity = 1
+                self.o_5.opacity = 0
+            else:
+                main_app.board[5] = "X"
+                self.x_5.opacity = 1
+                self.o_5.opacity = 0
+            return False
+        
+        # 6th button
+        if 0.633 < touch.spos[0] < 0.847 and 0.437 < touch.spos[1] < 0.567:
+            if main_app.board[6] == "X":
+                main_app.board[6] = "O"
+                self.x_6.opacity = 0
+                self.o_6.opacity = 1
+            elif main_app.board[6] == "O":
+                main_app.board[6] = "X"
+                self.x_6.opacity = 1
+                self.o_6.opacity = 0
+            else:
+                main_app.board[6] = "X"
+                self.x_6.opacity = 1
+                self.o_6.opacity = 0
+            return False
+        
+        # 7th button
+        if 0.15 < touch.spos[0] < 0.355 and 0.304 < touch.spos[1] < 0.423:
+            if main_app.board[7] == "X":
+                main_app.board[7] = "O"
+                self.x_7.opacity = 0
+                self.o_7.opacity = 1
+            elif main_app.board[7] == "O":
+                main_app.board[7] = "X"
+                self.x_7.opacity = 1
+                self.o_7.opacity = 0
+            else:
+                main_app.board[7] = "X"
+                self.x_7.opacity = 1
+                self.o_7.opacity = 0
+            return False
+        
+        # 8th button
+        if 0.380 < touch.spos[0] < 0.611 and 0.304 < touch.spos[1] < 0.423:
+            if main_app.board[8] == "X":
+                main_app.board[8] = "O"
+                self.x_8.opacity = 0
+                self.o_8.opacity = 1
+            elif main_app.board[8] == "O":
+                main_app.board[8] = "X"
+                self.x_8.opacity = 1
+                self.o_8.opacity = 0
+            else:
+                main_app.board[8] = "X"
+                self.x_8.opacity = 1
+                self.o_8.opacity = 0
+            return False
+        
+        # 9th button
+        if 0.633 < touch.spos[0] < 0.847 and 0.304 < touch.spos[1] < 0.423:
+            if main_app.board[9] == "X":
+                main_app.board[9] = "O"
+                self.x_9.opacity = 0
+                self.o_9.opacity = 1
+            elif main_app.board[9] == "O":
+                main_app.board[9] = "X"
+                self.x_9.opacity = 1
+                self.o_9.opacity = 0
+            else:
+                main_app.board[9] = "X"
+                self.x_9.opacity = 1
+                self.o_9.opacity = 0
+            return False
+        
+        else:
+            print(touch)
 
     def on_touch_move(self, touch):
         super().on_touch_move(touch)
@@ -175,15 +322,6 @@ class MainApp(App):
     def __init__(self, **kwargs):
         super(MainApp, self).__init__(**kwargs)
         self.board = [' '] * 10
-        self.board[1] = "X"
-        self.board[3] = "X"
-        self.board[4] = "O"
-        self.board[2] = "X"
-        self.board[5] = "O"
-        self.board[6] = "O"
-        self.board[7] = "X"
-        self.board[8] = "X"
-        self.board[9] = "O"
 
     def build(self):
         Window.size = (360, 640)
