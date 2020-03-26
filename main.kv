@@ -4,7 +4,7 @@
 	orientation: "vertical"
 	Image:
 		id: bg
-		source: 'bg.png'
+		source: 'assets/images/bg.png'
 <Main_Card>:
     canvas:
         Color:
@@ -27,7 +27,7 @@
         markup: True
         pos_hint: {'center_x': 0.5, 'center_y':0.0585}
         size_hint_x: None
-        font_name: "Marvel-Bold"
+        font_name: "assets/fonts/Marvel-Bold"
         color: (0.337, 0.564, 0.58, 0.5)
         font_size: Window.size[0]*0.133
 <Lose_Screen>:
@@ -42,7 +42,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.882}
             size_hint_x: None
-            font_name: "Marvel-Bold"
+            font_name: "assets/fonts/Marvel-Bold"
             color: (0.917, 0.929, 0.901, 0.75)
             font_size: Window.size[0]*0.133
         Label:
@@ -50,7 +50,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.5}
             size_hint_x: None
-            font_name: "Marvel-Bold"
+            font_name: "assets/fonts/Marvel-Bold"
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
 <Win_Screen>:
@@ -65,7 +65,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.882}
             size_hint_x: None
-            font_name: "Marvel-Bold"
+            font_name: "assets/fonts/Marvel-Bold"
             color: (0.917, 0.929, 0.901, 0.75)
             font_size: Window.size[0]*0.133
         Label:
@@ -73,7 +73,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.5}
             size_hint_x: None
-            font_name: "Marvel-Bold"
+            font_name: "assets/fonts/Marvel-Bold"
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
 <Main_Screen>:
@@ -88,78 +88,46 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.882}
             size_hint_x: None
-            font_name: "Marvel-Bold"
+            font_name: "assets/fonts/Marvel-Bold"
             color: (0.917, 0.929, 0.901, 0.75)
             font_size: Window.size[0]*0.133
         Image:
             id: grid
-            source: 'grid.png'
+            source: 'assets/images/grid.png'
             size_hint_x: None
             width: Window.size[0]*0.75
             pos:  Window.size[0]*0.12, 0
+<Intro_Screen>:
+    BG:
+    FloatLayout:
+        orientation: "vertical"
+        Main_Card:
+        Button_Card:
+            button_text: "START!"
+        Label:
+            text: "Tic-Tac-Toe"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.5}
+            size_hint_x: None
+            font_name: "assets/fonts/Marvel-Bold"
+            color: (0.337, 0.564, 0.58, 1)
+            font_size: Window.size[0]*0.2
 ScreenManager:
     id: screen_manager
     transition: FadeTransition(duration=.15)
+    Intro_Screen:
+        id: lose_screen
+        manager: screen_manager
+        name: "intro"
     Main_Screen:
         id: main_screen
         manager: screen_manager
         name: "main"
-        GridLayout:
-            cols: 1
-            Button:
-                text: "Hello"
-                on_release: screen_manager.current="win"
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
     Win_Screen:
         id: win_screen
         manager: screen_manager
         name: "win"
-        GridLayout:
-            cols: 1
-            Button:
-                text: "Hello"
-                on_release: screen_manager.current="lose"
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
     Lose_Screen:
         id: lose_screen
         manager: screen_manager
         name: "lose"
-        GridLayout:
-            cols: 1
-            Button:
-                text: "Hello"
-                on_release: screen_manager.current="main"
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:
-            Label:

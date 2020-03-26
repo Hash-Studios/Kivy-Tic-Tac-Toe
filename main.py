@@ -8,6 +8,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager, Screen
 import game
+from kivy.core.audio import SoundLoader
 
 
 def interpolate(f_co, t_co, interval):
@@ -31,9 +32,9 @@ class BG(BoxLayout):
         t_co = (192, 232, 146)
         for i, color in enumerate(interpolate(f_co, t_co, self.h)):
             draw.line([(0, i), (self.w, i)], tuple(color), width=1)
-        with open('bg.png', 'wb') as f:
+        with open('assets/images/bg.png', 'wb') as f:
             gradient.save(f)
-        self.ids.bg.source = 'bg.png'
+        self.ids.bg.source = 'assets/images/bg.png'
         self.ids.bg.reload()
 
 
@@ -47,24 +48,25 @@ class Button_Card(FloatLayout):
         super(Button_Card, self).__init__(**kwargs)
 
 
-
 class Main_Screen(Screen):
     def __init__(self, **kwargs):
         super(Main_Screen, self).__init__(**kwargs)
-    
+
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
         # if touch.spos[1]<0.118:
-            # print(touch.spos)
-            # if self.collide_point(*touch.pos):
-            #     print("Touch down")
-            #     return False
+        # print(touch.spos)
+        # if self.collide_point(*touch.pos):
+        #     print("Touch down")
+        #     return False
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
-        if touch.spos[1]<0.118:             #Bottom Button
+        if touch.spos[1] < 0.118:  # Bottom Button
+            main_app.select.play()
             if self.collide_point(*touch.pos):
                 print("RESET")
+                self.manager.current = "win"
                 return False
 
     def on_touch_move(self, touch):
@@ -74,19 +76,22 @@ class Main_Screen(Screen):
 class Win_Screen(Screen):
     def __init__(self, **kwargs):
         super(Win_Screen, self).__init__(**kwargs)
+
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
         # if touch.spos[1]<0.118:
-            # print(touch.spos)
-            # if self.collide_point(*touch.pos):
-            #     print("Touch down")
-            #     return False
+        # print(touch.spos)
+        # if self.collide_point(*touch.pos):
+        #     print("Touch down")
+        #     return False
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
-        if touch.spos[1]<0.118:             #Bottom Button
+        if touch.spos[1] < 0.118:  # Bottom Button
+            main_app.select.play()
             if self.collide_point(*touch.pos):
                 print("BACK")
+                self.manager.current = "lose"
                 return False
 
     def on_touch_move(self, touch):
@@ -96,19 +101,47 @@ class Win_Screen(Screen):
 class Lose_Screen(Screen):
     def __init__(self, **kwargs):
         super(Lose_Screen, self).__init__(**kwargs)
+
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
         # if touch.spos[1]<0.118:
-            # print(touch.spos)
-            # if self.collide_point(*touch.pos):
-            #     print("Touch down")
-            #     return False
+        # print(touch.spos)
+        # if self.collide_point(*touch.pos):
+        #     print("Touch down")
+        #     return False
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
-        if touch.spos[1]<0.118:             #Bottom Button
+        if touch.spos[1] < 0.118:  # Bottom Button
+            main_app.select.play()
             if self.collide_point(*touch.pos):
                 print("BACK")
+                self.manager.current = "main"
+                return False
+
+    def on_touch_move(self, touch):
+        super().on_touch_move(touch)
+
+
+class Intro_Screen(Screen):
+    def __init__(self, **kwargs):
+        super(Intro_Screen, self).__init__(**kwargs)
+
+    def on_touch_down(self, touch):
+        super().on_touch_down(touch)
+        # if touch.spos[1]<0.118:
+        # print(touch.spos)
+        # if self.collide_point(*touch.pos):
+        #     print("Touch down")
+        #     return False
+
+    def on_touch_up(self, touch):
+        super().on_touch_up(touch)
+        if touch.spos[1] < 0.118:  # Bottom Button
+            main_app.start.play()
+            if self.collide_point(*touch.pos):
+                print("BACK")
+                self.manager.current = "main"
                 return False
 
     def on_touch_move(self, touch):
@@ -118,6 +151,12 @@ class Lose_Screen(Screen):
 class MainApp(App):
     def build(self):
         Window.size = (360, 640)
+        self.app_start = SoundLoader.load('assets/sounds/app_start.wav')
+        self.app_start.volume = 0.8
+        self.app_start.play()
+        self.select = SoundLoader.load('assets/sounds/select.wav')
+        self.start = SoundLoader.load('assets/sounds/start.wav')
+        self.select.volume = 0.5
 
 
 if __name__ == "__main__":
