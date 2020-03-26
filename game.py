@@ -44,6 +44,7 @@ def playAgain():
 
 def makeMove(board, letter, move):
     board[move] = letter
+    print(board)
 
 def isWinner(bo, le):
     # Given a board and a player's letter, this function returns True if that player has won.
