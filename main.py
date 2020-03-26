@@ -1,14 +1,18 @@
-from PIL import Image, ImageDraw
+from functools import partial
+
+from kivy.animation import Animation
 from kivy.app import App
-from kivy.lang import Builder
-from kivy.core.window import Window
+from kivy.clock import Clock
 from kivy.config import Config
+from kivy.core.audio import SoundLoader
+from kivy.core.window import Window
+from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
-from kivy.clock import Clock
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
+from PIL import Image, ImageDraw
+
 import game
-from kivy.core.audio import SoundLoader
 
 
 def interpolate(f_co, t_co, interval):
@@ -65,12 +69,33 @@ class Main_Screen(Screen):
         if touch.spos[1] < 0.118:  # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
-                print("RESET")
-                self.manager.current = "win"
+                Clock.schedule_once(partial(self.set_opacity, self.x_1), 0)
+                Clock.schedule_once(partial(self.set_opacity, self.o_1), 0)
+                Clock.schedule_once(partial(self.set_opacity, self.x_2), 0.15)
+                Clock.schedule_once(partial(self.set_opacity, self.o_2), 0.15)
+                Clock.schedule_once(partial(self.set_opacity, self.x_3), 0.3)
+                Clock.schedule_once(partial(self.set_opacity, self.o_3), 0.3)
+                Clock.schedule_once(partial(self.set_opacity, self.x_4), 0.45)
+                Clock.schedule_once(partial(self.set_opacity, self.o_4), 0.45)
+                Clock.schedule_once(partial(self.set_opacity, self.x_5), 0.6)
+                Clock.schedule_once(partial(self.set_opacity, self.o_5), 0.6)
+                Clock.schedule_once(partial(self.set_opacity, self.x_6), 0.75)
+                Clock.schedule_once(partial(self.set_opacity, self.o_6), 0.75)
+                Clock.schedule_once(partial(self.set_opacity, self.x_7), 0.90)
+                Clock.schedule_once(partial(self.set_opacity, self.o_7), 0.90)
+                Clock.schedule_once(partial(self.set_opacity, self.x_8), 1.05)
+                Clock.schedule_once(partial(self.set_opacity, self.o_8), 1.05)
+                Clock.schedule_once(partial(self.set_opacity, self.x_9), 1.2)
+                Clock.schedule_once(partial(self.set_opacity, self.o_9), 1.2)
+                main_app.board = [" "]*10
                 return False
 
     def on_touch_move(self, touch):
         super().on_touch_move(touch)
+
+    def set_opacity(self, image, dt):
+        anim = Animation(opacity=0, duration=0.35)
+        anim.start(image)
 
 
 class Win_Screen(Screen):
@@ -90,7 +115,7 @@ class Win_Screen(Screen):
         if touch.spos[1] < 0.118:  # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
-                print("BACK")
+                print(main_app.board)
                 self.manager.current = "lose"
                 return False
 
@@ -115,7 +140,6 @@ class Lose_Screen(Screen):
         if touch.spos[1] < 0.118:  # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
-                print("BACK")
                 self.manager.current = "main"
                 return False
 
@@ -140,7 +164,6 @@ class Intro_Screen(Screen):
         if touch.spos[1] < 0.118:  # Bottom Button
             main_app.start.play()
             if self.collide_point(*touch.pos):
-                print("BACK")
                 self.manager.current = "main"
                 return False
 
@@ -149,6 +172,19 @@ class Intro_Screen(Screen):
 
 
 class MainApp(App):
+    def __init__(self, **kwargs):
+        super(MainApp, self).__init__(**kwargs)
+        self.board = [' '] * 10
+        self.board[1] = "X"
+        self.board[3] = "X"
+        self.board[4] = "O"
+        self.board[2] = "X"
+        self.board[5] = "O"
+        self.board[6] = "O"
+        self.board[7] = "X"
+        self.board[8] = "X"
+        self.board[9] = "O"
+
     def build(self):
         Window.size = (360, 640)
         self.app_start = SoundLoader.load('assets/sounds/app_start.wav')

@@ -77,8 +77,28 @@
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
 <Main_Screen>:
+    float_layout: float_layout
+    x_1: x_1
+    x_2: x_2
+    x_3: x_3
+    x_4: x_4
+    x_5: x_5
+    x_6: x_6
+    x_7: x_7
+    x_8: x_8
+    x_9: x_9
+    o_1: o_1
+    o_2: o_2
+    o_3: o_3
+    o_4: o_4
+    o_5: o_5
+    o_6: o_6
+    o_7: o_7
+    o_8: o_8
+    o_9: o_9
     BG:
     FloatLayout:
+        id: float_layout
         orientation: "vertical"
         Main_Card:
         Button_Card:
@@ -97,6 +117,144 @@
             size_hint_x: None
             width: Window.size[0]*0.75
             pos:  Window.size[0]*0.12, 0
+
+
+        Image:
+            id: x_1
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.25, 'center_y': 0.64}
+            opacity: 1 if app.board[1]== "X" else 0
+        Image:
+            id: x_2
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.5, 'center_y': 0.64}
+            opacity: 1 if app.board[2]== "X" else 0
+        Image:
+            id: x_3
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.75, 'center_y': 0.64}
+            opacity: 1 if app.board[3]== "X" else 0
+
+
+        Image:
+            id: x_4
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.25, 'center_y': 0.5}
+            opacity: 1 if app.board[4]== "X" else 0
+        Image:
+            id: x_5
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.5, 'center_y': 0.5}
+            opacity: 1 if app.board[5]== "X" else 0
+        Image:
+            id: x_6
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.75, 'center_y': 0.5}
+            opacity: 1 if app.board[6]== "X" else 0
+
+
+        Image:
+            id: x_7
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.25, 'center_y': 0.36}
+            opacity: 1 if app.board[7]== "X" else 0
+        Image:
+            id: x_8
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.5, 'center_y': 0.36}
+            opacity: 1 if app.board[8]== "X" else 0
+        Image:
+            id: x_9
+            source: 'assets/images/x.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.75, 'center_y': 0.36}
+            opacity: 1 if app.board[9]== "X" else 0
+
+        Image:
+            id: o_1
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.25, 'center_y': 0.64}
+            opacity: 1 if app.board[1]== "O" else 0
+        Image:
+            id: o_2
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.5, 'center_y': 0.64}
+            opacity: 1 if app.board[2]== "O" else 0
+        Image:
+            id: o_3
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.75, 'center_y': 0.64}
+            opacity: 1 if app.board[3]== "O" else 0
+
+
+        Image:
+            id: o_4
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.25, 'center_y': 0.5}
+            opacity: 1 if app.board[4]== "O" else 0
+        Image:
+            id: o_5
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.5, 'center_y': 0.5}
+            opacity: 1 if app.board[5]== "O" else 0
+        Image:
+            id: o_6
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.75, 'center_y': 0.5}
+            opacity: 1 if app.board[6]== "O" else 0
+
+
+        Image:
+            id: o_7
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.25, 'center_y': 0.36}
+            opacity: 1 if app.board[7]== "O" else 0
+        Image:
+            id: o_8
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.5, 'center_y': 0.36}
+            opacity: 1 if app.board[8]== "O" else 0
+        Image:
+            id: o_9
+            source: 'assets/images/o.png'
+            size_hint_x: None
+            width: Window.size[0]*0.2
+            pos_hint: {'center_x':0.75, 'center_y': 0.36}
+            opacity: 1 if app.board[9]== "O" else 0
+
 <Intro_Screen>:
     BG:
     FloatLayout:
