@@ -76,6 +76,29 @@
             font_name: "assets/fonts/Marvel-Bold"
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
+<Tie_Screen>:
+    BG:
+    FloatLayout:
+        orientation: "vertical"
+        Main_Card:
+        Button_Card:
+            button_text: "BACK"
+        Label:
+            text: "Tic - Tac - Toe"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.882}
+            size_hint_x: None
+            font_name: "assets/fonts/Marvel-Bold"
+            color: (0.917, 0.929, 0.901, 0.75)
+            font_size: Window.size[0]*0.133
+        Label:
+            text: "GAME TIED!"
+            markup: True
+            pos_hint: {'center_x': 0.5, 'center_y':0.5}
+            size_hint_x: None
+            font_name: "assets/fonts/Marvel-Bold"
+            color: (0.337, 0.564, 0.58, 1)
+            font_size: Window.size[0]*0.2
 <Main_Screen>:
     float_layout: float_layout
     x_1: x_1
@@ -289,3 +312,7 @@ ScreenManager:
         id: lose_screen
         manager: screen_manager
         name: "lose"
+    Tie_Screen:
+        id: lose_screen
+        manager: screen_manager
+        name: "tie"

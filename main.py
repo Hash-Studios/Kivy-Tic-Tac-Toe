@@ -57,6 +57,7 @@ class Main_Screen(Screen):
         super(Main_Screen, self).__init__(**kwargs)
         self.turn = game.whoGoesFirst()
         print(self.turn)
+        self.gameIsPlaying = True
         if self.turn == "computer":
             move = game.getComputerMove(main_app.board, "O")
             game.makeMove(main_app.board, "O", move)
@@ -66,13 +67,30 @@ class Main_Screen(Screen):
 
     def computer_move(self):
         if self.turn == "computer":
-            move = game.getComputerMove(main_app.board, "O")
-            game.makeMove(main_app.board, "O", move)
-            a = {1: self.o_1, 2: self.o_2, 3: self.o_3, 4: self.o_4,
-                 5: self.o_5, 6: self.o_6, 7: self.o_7, 8: self.o_8, 9: self.o_9}
-            Clock.schedule_once(partial(self.set_opacity, a[move], 1, 0.25), 1)
-
-            self.turn = "player"
+            if game.isBoardFull(main_app.board):
+                print('The game is a tie!')
+                self.gameIsPlaying = False
+                self.manager.current = "tie"
+                main_app.board = [" "]*10
+            else:
+                move = game.getComputerMove(main_app.board, "O")
+                game.makeMove(main_app.board, "O", move)
+                a = {1: self.o_1, 2: self.o_2, 3: self.o_3, 4: self.o_4,
+                    5: self.o_5, 6: self.o_6, 7: self.o_7, 8: self.o_8, 9: self.o_9}
+                Clock.schedule_once(partial(self.set_opacity, a[move], 1, 0.25), 1)
+                if game.isWinner(main_app.board, "O"):
+                    print('The computer has beaten you! You lose.')
+                    self.gameIsPlaying = False
+                    self.manager.current = "lose"
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = "player"
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
@@ -339,6 +357,29 @@ class Win_Screen(Screen):
 class Lose_Screen(Screen):
     def __init__(self, **kwargs):
         super(Lose_Screen, self).__init__(**kwargs)
+
+    def on_touch_down(self, touch):
+        super().on_touch_down(touch)
+        # if touch.spos[1]<0.118:
+        # print(touch.spos)
+        # if self.collide_point(*touch.pos):
+        #     print("Touch down")
+        #     return False
+
+    def on_touch_up(self, touch):
+        super().on_touch_up(touch)
+        if touch.spos[1] < 0.118:  # Bottom Button
+            main_app.select.play()
+            if self.collide_point(*touch.pos):
+                self.manager.current = "main"
+                return False
+
+    def on_touch_move(self, touch):
+        super().on_touch_move(touch)
+
+class Tie_Screen(Screen):
+    def __init__(self, **kwargs):
+        super(Tie_Screen, self).__init__(**kwargs)
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
