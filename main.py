@@ -1,6 +1,7 @@
 import os
 from functools import partial
 
+from jnius import autoclass
 from kivy.animation import Animation
 from kivy.app import App
 from kivy.clock import Clock
@@ -14,12 +15,21 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 from PIL import Image, ImageDraw
 
 import game
+from android.runnable import run_on_ui_thread
+
+Color = autoclass("android.graphics.Color")
+WindowManager = autoclass('android.view.WindowManager$LayoutParams')
+activity = autoclass('org.kivy.android.PythonActivity').mActivity
+
 
 fonts_path = os.path.dirname(__file__)
 font_path = os.path.join(fonts_path, 'Marvel-Bold.ttf')
 sound1_path = os.path.join(fonts_path, 'select.wav')
 sound2_path = os.path.join(fonts_path, 'app_start.wav')
 sound3_path = os.path.join(fonts_path, 'start.wav')
+sound4_path = os.path.join(fonts_path, 'win.wav')
+sound5_path = os.path.join(fonts_path, 'lose.wav')
+
 
 def interpolate(f_co, t_co, interval):
     det_co = [(t - f) / interval for f, t in zip(f_co, t_co)]
@@ -39,7 +49,7 @@ class BG(BoxLayout):
         gradient = Image.new('RGBA', (self.w, self.h), color=0)
         draw = ImageDraw.Draw(gradient)
         f_co = (23, 147, 156)
-        t_co = (192, 232, 146)
+        t_co = (176, 232, 112)
         for i, color in enumerate(interpolate(f_co, t_co, self.h)):
             draw.line([(0, i), (self.w, i)], tuple(color), width=1)
         with open('assets/images/bg.png', 'wb') as f:
@@ -80,11 +90,12 @@ class Main_Screen(Screen):
             move = game.getComputerMove(main_app.board, "O")
             game.makeMove(main_app.board, "O", move)
             a = {1: self.o_1, 2: self.o_2, 3: self.o_3, 4: self.o_4,
-                5: self.o_5, 6: self.o_6, 7: self.o_7, 8: self.o_8, 9: self.o_9}
-            Clock.schedule_once(partial(self.set_opacity, a[move], 1, 0.25), 1)
+                 5: self.o_5, 6: self.o_6, 7: self.o_7, 8: self.o_8, 9: self.o_9}
+            Clock.schedule_once(partial(self.set_opacity, a[move], 1, 0.1), 1)
             if game.isWinner(main_app.board, "O"):
                 print('The computer has beaten you! You lose.')
                 self.gameIsPlaying = False
+                main_app.lose.play()
                 self.manager.current = "lose"
                 self.clear_screen()
                 main_app.board = [" "]*10
@@ -93,6 +104,7 @@ class Main_Screen(Screen):
                     print('The game is a tie!')
                     self.gameIsPlaying = False
                     self.clear_screen()
+                    main_app.lose.play()
                     self.manager.current = "tie"
                     main_app.board = [" "]*10
                 else:
@@ -137,10 +149,13 @@ class Main_Screen(Screen):
         Clock.schedule_once(partial(self.clear_opacity, self.x_9), 1.2)
         Clock.schedule_once(partial(self.clear_opacity, self.o_9), 1.2)
         main_app.board = [" "]*10
+
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
-        a_delay = 0.1
+        a_delay = 0.05
         if touch.spos[1] < 0.118:           # Bottom Button
+            if main_app.select:
+                main_app.select.stop()
             main_app.select.play()
             if self.collide_point(*touch.pos):
                 self.clear_screen()
@@ -153,18 +168,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_1, 1, a_delay), 0)
             #     self.o_1.opacity = 1
             if main_app.board[1] != "O" and main_app.board[1] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[1] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_1, 1, a_delay), 0)
             #     self.o_1.opacity = 0
             # else:
                 main_app.board[1] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_1, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_1, 1, a_delay), 0)
                 self.o_1.opacity = 0
                 game.makeMove(main_app.board, "X", 1)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -172,6 +191,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -187,18 +207,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_2, 1, a_delay), 0)
             #     self.o_2.opacity = 1
             if main_app.board[2] != "O" and main_app.board[2] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[2] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_2, 1, a_delay), 0)
             #     self.o_2.opacity = 0
             # else:
                 main_app.board[2] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_2, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_2, 1, a_delay), 0)
                 self.o_2.opacity = 0
                 game.makeMove(main_app.board, "X", 2)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -206,6 +230,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -221,18 +246,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_3, 1, a_delay), 0)
             #     self.o_3.opacity = 1
             if main_app.board[3] != "O" and main_app.board[3] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[3] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_3, 1, a_delay), 0)
             #     self.o_3.opacity = 0
             # else:
                 main_app.board[3] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_3, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_3, 1, a_delay), 0)
                 self.o_3.opacity = 0
                 game.makeMove(main_app.board, "X", 3)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -240,6 +269,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -255,18 +285,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_4, 1, a_delay), 0)
             #     self.o_4.opacity = 1
             if main_app.board[4] != "O" and main_app.board[4] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[4] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_4, 1, a_delay), 0)
             #     self.o_4.opacity = 0
             # else:
                 main_app.board[4] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_4, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_4, 1, a_delay), 0)
                 self.o_4.opacity = 0
                 game.makeMove(main_app.board, "X", 4)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -274,6 +308,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -289,18 +324,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_5, 1, a_delay), 0)
             #     self.o_5.opacity = 1
             if main_app.board[5] != "O" and main_app.board[5] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[5] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_5, 1, a_delay), 0)
             #     self.o_5.opacity = 0
             # else:
                 main_app.board[5] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_5, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_5, 1, a_delay), 0)
                 self.o_5.opacity = 0
                 game.makeMove(main_app.board, "X", 5)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -308,6 +347,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -323,18 +363,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_6, 1, a_delay), 0)
             #     self.o_6.opacity = 1
             if main_app.board[6] != "O" and main_app.board[6] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[6] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_6, 1, a_delay), 0)
             #     self.o_6.opacity = 0
             # else:
                 main_app.board[6] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_6, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_6, 1, a_delay), 0)
                 self.o_6.opacity = 0
                 game.makeMove(main_app.board, "X", 6)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -342,6 +386,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -357,18 +402,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_7, 1, a_delay), 0)
             #     self.o_7.opacity = 1
             if main_app.board[7] != "O" and main_app.board[7] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[7] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_7, 1, a_delay), 0)
             #     self.o_7.opacity = 0
             # else:
                 main_app.board[7] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_7, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_7, 1, a_delay), 0)
                 self.o_7.opacity = 0
                 game.makeMove(main_app.board, "X", 7)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -376,6 +425,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -391,18 +441,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_8, 1, a_delay), 0)
             #     self.o_8.opacity = 1
             if main_app.board[8] != "O" and main_app.board[8] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[8] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_8, 1, a_delay), 0)
             #     self.o_8.opacity = 0
             # else:
                 main_app.board[8] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_8, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_8, 1, a_delay), 0)
                 self.o_8.opacity = 0
                 game.makeMove(main_app.board, "X", 8)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -410,6 +464,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -425,18 +480,22 @@ class Main_Screen(Screen):
             #     Clock.schedule_once(partial(self.set_opacity, self.x_9, 1, a_delay), 0)
             #     self.o_9.opacity = 1
             if main_app.board[9] != "O" and main_app.board[9] != "X" and self.turn == "player":
+                if main_app.select:
+                    main_app.select.stop()
                 main_app.select.play()
             #     main_app.board[9] = "X"
             #     Clock.schedule_once(partial(self.set_opacity, self.x_9, 1, a_delay), 0)
             #     self.o_9.opacity = 0
             # else:
                 main_app.board[9] = "X"
-                Clock.schedule_once(partial(self.set_opacity, self.x_9, 1, a_delay), 0)
+                Clock.schedule_once(
+                    partial(self.set_opacity, self.x_9, 1, a_delay), 0)
                 self.o_9.opacity = 0
                 game.makeMove(main_app.board, "X", 9)
                 if game.isWinner(main_app.board, "X"):
                     print('Hooray! You have won the game!')
                     self.gameIsPlaying = False
+                    main_app.win.play()
                     self.manager.current = "win"
                     self.clear_screen()
                     main_app.board = [" "]*10
@@ -444,6 +503,7 @@ class Main_Screen(Screen):
                     if game.isBoardFull(main_app.board):
                         print('The game is a tie!')
                         self.gameIsPlaying = False
+                        main_app.lose.play()
                         self.manager.current = "tie"
                         self.clear_screen()
                         main_app.board = [" "]*10
@@ -456,7 +516,7 @@ class Main_Screen(Screen):
         super().on_touch_move(touch)
 
     def clear_opacity(self, image, dt):
-        anim = Animation(opacity=0, duration=0.35)
+        anim = Animation(opacity=0, duration=0.25)
         anim.start(image)
 
     def set_opacity(self, image, opacity, duration, dt):
@@ -479,6 +539,8 @@ class Win_Screen(Screen):
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
         if touch.spos[1] < 0.118:  # Bottom Button
+            if main_app.select:
+                main_app.select.stop()
             main_app.select.play()
             if self.collide_point(*touch.pos):
                 self.manager.current = "intro"
@@ -504,6 +566,8 @@ class Lose_Screen(Screen):
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
         if touch.spos[1] < 0.118:  # Bottom Button
+            if main_app.select:
+                main_app.select.stop()
             main_app.select.play()
             if self.collide_point(*touch.pos):
                 self.manager.current = "intro"
@@ -512,6 +576,7 @@ class Lose_Screen(Screen):
 
     def on_touch_move(self, touch):
         super().on_touch_move(touch)
+
 
 class Tie_Screen(Screen):
     def __init__(self, **kwargs):
@@ -528,6 +593,8 @@ class Tie_Screen(Screen):
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
         if touch.spos[1] < 0.118:  # Bottom Button
+            if main_app.select:
+                main_app.select.stop()
             main_app.select.play()
             if self.collide_point(*touch.pos):
                 self.manager.current = "intro"
@@ -574,12 +641,26 @@ class MainApp(App):
 
     def build(self):
         #Window.size = (540, 960)
+        app = App.get_running_app()
         self.app_start = SoundLoader.load('assets/sounds/app_start.wav')
         self.app_start.volume = 0.8
         self.app_start.play()
         self.select = SoundLoader.load('assets/sounds/select.wav')
         self.start = SoundLoader.load('assets/sounds/start.wav')
-        self.select.volume = 0.5
+        self.win = SoundLoader.load('assets/sounds/win.wav')
+        self.lose = SoundLoader.load('assets/sounds/lose.wav')
+        self.select.volume = 0.3
+        self.lose.volume = 0.8
+        self.win.volume = 0.8
+        app.statusbar("#17939C")
+
+    @run_on_ui_thread
+    def statusbar(self, color):
+        window = activity.getWindow()
+        window.clearFlags(WindowManager.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.setStatusBarColor(Color.parseColor(color))
+        window.setNavigationBarColor(Color.parseColor(color))
 
 
 if __name__ == "__main__":

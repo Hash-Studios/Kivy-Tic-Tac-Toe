@@ -27,7 +27,7 @@
         markup: True
         pos_hint: {'center_x': 0.5, 'center_y':0.0585}
         size_hint_x: None
-        font_name: "assets/fonts/Marvel-Bold"
+        font_name: "Marvel-Bold"
         color: (0.337, 0.564, 0.58, 0.5)
         font_size: Window.size[0]*0.133
 <Lose_Screen>:
@@ -42,7 +42,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.882}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.917, 0.929, 0.901, 0.75)
             font_size: Window.size[0]*0.133
         Label:
@@ -50,7 +50,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.5}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
 <Win_Screen>:
@@ -65,7 +65,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.882}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.917, 0.929, 0.901, 0.75)
             font_size: Window.size[0]*0.133
         Label:
@@ -73,7 +73,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.5}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
 <Tie_Screen>:
@@ -88,7 +88,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.882}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.917, 0.929, 0.901, 0.75)
             font_size: Window.size[0]*0.133
         Label:
@@ -96,7 +96,7 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.5}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
 <Main_Screen>:
@@ -131,15 +131,19 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.882}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.917, 0.929, 0.901, 0.75)
             font_size: Window.size[0]*0.133
         Image:
             id: grid
             source: 'assets/images/grid.png'
+            allow_stretch: True
+            keep_ratio: True
+            size_hint_y: None
             size_hint_x: None
-            width: Window.size[0]*0.75
-            pos:  Window.size[0]*0.12, 0
+            width: Window.size[0]*0.8
+            height: Window.size[1]*0.8
+            pos:   Window.size[0]*0.1, Window.size[1]*0.1
 
 
         Image:
@@ -290,12 +294,12 @@
             markup: True
             pos_hint: {'center_x': 0.5, 'center_y':0.5}
             size_hint_x: None
-            font_name: "assets/fonts/Marvel-Bold"
+            font_name: "Marvel-Bold"
             color: (0.337, 0.564, 0.58, 1)
             font_size: Window.size[0]*0.2
 <Main_Manager>:
     id: screen_manager
-    transition: FadeTransition(duration=.15)
+    transition: FadeTransition(duration=.1)
     Intro_Screen:
         id: lose_screen
         manager: screen_manager
