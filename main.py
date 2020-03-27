@@ -1,3 +1,4 @@
+import os
 from functools import partial
 
 from kivy.animation import Animation
@@ -14,6 +15,11 @@ from PIL import Image, ImageDraw
 
 import game
 
+fonts_path = os.path.dirname(__file__)
+font_path = os.path.join(fonts_path, 'Marvel-Bold.ttf')
+sound1_path = os.path.join(fonts_path, 'select.wav')
+sound2_path = os.path.join(fonts_path, 'app_start.wav')
+sound3_path = os.path.join(fonts_path, 'start.wav')
 
 def interpolate(f_co, t_co, interval):
     det_co = [(t - f) / interval for f, t in zip(f_co, t_co)]
@@ -55,7 +61,11 @@ class Button_Card(FloatLayout):
 class Main_Screen(Screen):
     def __init__(self, **kwargs):
         super(Main_Screen, self).__init__(**kwargs)
+        self.game_start()
+
+    def game_start(self):
         self.turn = game.whoGoesFirst()
+        #self.turn = "player"
         print(self.turn)
         self.gameIsPlaying = True
         if self.turn == "computer":
@@ -67,30 +77,27 @@ class Main_Screen(Screen):
 
     def computer_move(self):
         if self.turn == "computer":
-            if game.isBoardFull(main_app.board):
-                print('The game is a tie!')
+            move = game.getComputerMove(main_app.board, "O")
+            game.makeMove(main_app.board, "O", move)
+            a = {1: self.o_1, 2: self.o_2, 3: self.o_3, 4: self.o_4,
+                5: self.o_5, 6: self.o_6, 7: self.o_7, 8: self.o_8, 9: self.o_9}
+            Clock.schedule_once(partial(self.set_opacity, a[move], 1, 0.25), 1)
+            if game.isWinner(main_app.board, "O"):
+                print('The computer has beaten you! You lose.')
                 self.gameIsPlaying = False
-                self.manager.current = "tie"
+                self.manager.current = "lose"
+                self.clear_screen()
                 main_app.board = [" "]*10
             else:
-                move = game.getComputerMove(main_app.board, "O")
-                game.makeMove(main_app.board, "O", move)
-                a = {1: self.o_1, 2: self.o_2, 3: self.o_3, 4: self.o_4,
-                    5: self.o_5, 6: self.o_6, 7: self.o_7, 8: self.o_8, 9: self.o_9}
-                Clock.schedule_once(partial(self.set_opacity, a[move], 1, 0.25), 1)
-                if game.isWinner(main_app.board, "O"):
-                    print('The computer has beaten you! You lose.')
+                if game.isBoardFull(main_app.board):
+                    print('The game is a tie!')
                     self.gameIsPlaying = False
-                    self.manager.current = "lose"
+                    self.clear_screen()
+                    self.manager.current = "tie"
                     main_app.board = [" "]*10
                 else:
-                    if game.isBoardFull(main_app.board):
-                        print('The game is a tie!')
-                        self.gameIsPlaying = False
-                        self.manager.current = "tie"
-                        main_app.board = [" "]*10
-                    else:
-                        self.turn = "player"
+                    self.turn = "player"
+        self.turn = "player"
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
@@ -100,41 +107,43 @@ class Main_Screen(Screen):
         #     print("Touch down")
         #     return False
 
+    def clear_screen(self):
+        Clock.schedule_once(partial(self.clear_opacity, self.x_1), 0)
+        Clock.schedule_once(partial(self.clear_opacity, self.o_1), 0)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.x_2), 0.15)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.o_2), 0.15)
+        Clock.schedule_once(partial(self.clear_opacity, self.x_3), 0.3)
+        Clock.schedule_once(partial(self.clear_opacity, self.o_3), 0.3)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.x_4), 0.45)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.o_4), 0.45)
+        Clock.schedule_once(partial(self.clear_opacity, self.x_5), 0.6)
+        Clock.schedule_once(partial(self.clear_opacity, self.o_5), 0.6)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.x_6), 0.75)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.o_6), 0.75)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.x_7), 0.90)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.o_7), 0.90)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.x_8), 1.05)
+        Clock.schedule_once(
+            partial(self.clear_opacity, self.o_8), 1.05)
+        Clock.schedule_once(partial(self.clear_opacity, self.x_9), 1.2)
+        Clock.schedule_once(partial(self.clear_opacity, self.o_9), 1.2)
+        main_app.board = [" "]*10
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
         a_delay = 0.1
         if touch.spos[1] < 0.118:           # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
-                Clock.schedule_once(partial(self.clear_opacity, self.x_1), 0)
-                Clock.schedule_once(partial(self.clear_opacity, self.o_1), 0)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.x_2), 0.15)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.o_2), 0.15)
-                Clock.schedule_once(partial(self.clear_opacity, self.x_3), 0.3)
-                Clock.schedule_once(partial(self.clear_opacity, self.o_3), 0.3)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.x_4), 0.45)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.o_4), 0.45)
-                Clock.schedule_once(partial(self.clear_opacity, self.x_5), 0.6)
-                Clock.schedule_once(partial(self.clear_opacity, self.o_5), 0.6)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.x_6), 0.75)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.o_6), 0.75)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.x_7), 0.90)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.o_7), 0.90)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.x_8), 1.05)
-                Clock.schedule_once(
-                    partial(self.clear_opacity, self.o_8), 1.05)
-                Clock.schedule_once(partial(self.clear_opacity, self.x_9), 1.2)
-                Clock.schedule_once(partial(self.clear_opacity, self.o_9), 1.2)
-                main_app.board = [" "]*10
+                self.clear_screen()
                 return False
 
         # 1st button
@@ -153,8 +162,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_1, 1, a_delay), 0)
                 self.o_1.opacity = 0
                 game.makeMove(main_app.board, "X", 1)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 2nd button
@@ -173,8 +196,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_2, 1, a_delay), 0)
                 self.o_2.opacity = 0
                 game.makeMove(main_app.board, "X", 2)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 3rd button
@@ -193,8 +230,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_3, 1, a_delay), 0)
                 self.o_3.opacity = 0
                 game.makeMove(main_app.board, "X", 3)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 4th button
@@ -213,8 +264,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_4, 1, a_delay), 0)
                 self.o_4.opacity = 0
                 game.makeMove(main_app.board, "X", 4)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 5th button
@@ -233,8 +298,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_5, 1, a_delay), 0)
                 self.o_5.opacity = 0
                 game.makeMove(main_app.board, "X", 5)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 6th button
@@ -253,8 +332,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_6, 1, a_delay), 0)
                 self.o_6.opacity = 0
                 game.makeMove(main_app.board, "X", 6)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 7th button
@@ -273,8 +366,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_7, 1, a_delay), 0)
                 self.o_7.opacity = 0
                 game.makeMove(main_app.board, "X", 7)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 8th button
@@ -293,8 +400,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_8, 1, a_delay), 0)
                 self.o_8.opacity = 0
                 game.makeMove(main_app.board, "X", 8)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
         # 9th button
@@ -313,8 +434,22 @@ class Main_Screen(Screen):
                 Clock.schedule_once(partial(self.set_opacity, self.x_9, 1, a_delay), 0)
                 self.o_9.opacity = 0
                 game.makeMove(main_app.board, "X", 9)
-                self.turn = "computer"
-                self.computer_move()
+                if game.isWinner(main_app.board, "X"):
+                    print('Hooray! You have won the game!')
+                    self.gameIsPlaying = False
+                    self.manager.current = "win"
+                    self.clear_screen()
+                    main_app.board = [" "]*10
+                else:
+                    if game.isBoardFull(main_app.board):
+                        print('The game is a tie!')
+                        self.gameIsPlaying = False
+                        self.manager.current = "tie"
+                        self.clear_screen()
+                        main_app.board = [" "]*10
+                    else:
+                        self.turn = 'computer'
+                        self.computer_move()
                 return False
 
     def on_touch_move(self, touch):
@@ -346,8 +481,8 @@ class Win_Screen(Screen):
         if touch.spos[1] < 0.118:  # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
-                print(main_app.board)
-                self.manager.current = "lose"
+                self.manager.current = "intro"
+                main_app.board = [' '] * 10
                 return False
 
     def on_touch_move(self, touch):
@@ -371,7 +506,8 @@ class Lose_Screen(Screen):
         if touch.spos[1] < 0.118:  # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
-                self.manager.current = "main"
+                self.manager.current = "intro"
+                main_app.board = [' '] * 10
                 return False
 
     def on_touch_move(self, touch):
@@ -394,7 +530,8 @@ class Tie_Screen(Screen):
         if touch.spos[1] < 0.118:  # Bottom Button
             main_app.select.play()
             if self.collide_point(*touch.pos):
-                self.manager.current = "main"
+                self.manager.current = "intro"
+                main_app.board = [' '] * 10
                 return False
 
     def on_touch_move(self, touch):
@@ -425,13 +562,18 @@ class Intro_Screen(Screen):
         super().on_touch_move(touch)
 
 
+class Main_Manager(ScreenManager):
+    def __init__(self, **kwargs):
+        super(Main_Manager, self).__init__(**kwargs)
+
+
 class MainApp(App):
     def __init__(self, **kwargs):
         super(MainApp, self).__init__(**kwargs)
         self.board = [' '] * 10
 
     def build(self):
-        Window.size = (360, 640)
+        #Window.size = (540, 960)
         self.app_start = SoundLoader.load('assets/sounds/app_start.wav')
         self.app_start.volume = 0.8
         self.app_start.play()
