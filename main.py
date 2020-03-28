@@ -113,11 +113,6 @@ class Main_Screen(Screen):
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
-        # if touch.spos[1]<0.118:
-        # print(touch.spos)
-        # if self.collide_point(*touch.pos):
-        #     print("Touch down")
-        #     return False
 
     def clear_screen(self):
         Clock.schedule_once(partial(self.clear_opacity, self.x_1), 0)
@@ -163,18 +158,10 @@ class Main_Screen(Screen):
 
         # 1st button
         if 0.15 < touch.spos[0] < 0.355 and 0.576 < touch.spos[1] < 0.696:
-            # if main_app.board[1] == "X":
-            #     main_app.board[1] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_1, 1, a_delay), 0)
-            #     self.o_1.opacity = 1
             if main_app.board[1] != "O" and main_app.board[1] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[1] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_1, 1, a_delay), 0)
-            #     self.o_1.opacity = 0
-            # else:
                 main_app.board[1] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_1, 1, a_delay), 0)
@@ -202,18 +189,10 @@ class Main_Screen(Screen):
 
         # 2nd button
         if 0.380 < touch.spos[0] < 0.611 and 0.576 < touch.spos[1] < 0.696:
-            # if main_app.board[2] == "X":
-            #     main_app.board[2] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_2, 1, a_delay), 0)
-            #     self.o_2.opacity = 1
             if main_app.board[2] != "O" and main_app.board[2] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[2] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_2, 1, a_delay), 0)
-            #     self.o_2.opacity = 0
-            # else:
                 main_app.board[2] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_2, 1, a_delay), 0)
@@ -241,18 +220,10 @@ class Main_Screen(Screen):
 
         # 3rd button
         if 0.633 < touch.spos[0] < 0.847 and 0.576 < touch.spos[1] < 0.696:
-            # if main_app.board[3] == "X":
-            #     main_app.board[3] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_3, 1, a_delay), 0)
-            #     self.o_3.opacity = 1
             if main_app.board[3] != "O" and main_app.board[3] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[3] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_3, 1, a_delay), 0)
-            #     self.o_3.opacity = 0
-            # else:
                 main_app.board[3] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_3, 1, a_delay), 0)
@@ -280,18 +251,10 @@ class Main_Screen(Screen):
 
         # 4th button
         if 0.15 < touch.spos[0] < 0.355 and 0.437 < touch.spos[1] < 0.567:
-            # if main_app.board[4] == "X":
-            #     main_app.board[4] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_4, 1, a_delay), 0)
-            #     self.o_4.opacity = 1
             if main_app.board[4] != "O" and main_app.board[4] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[4] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_4, 1, a_delay), 0)
-            #     self.o_4.opacity = 0
-            # else:
                 main_app.board[4] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_4, 1, a_delay), 0)
@@ -319,18 +282,10 @@ class Main_Screen(Screen):
 
         # 5th button
         if 0.380 < touch.spos[0] < 0.611 and 0.437 < touch.spos[1] < 0.567:
-            # if main_app.board[5] == "X":
-            #     main_app.board[5] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_5, 1, a_delay), 0)
-            #     self.o_5.opacity = 1
             if main_app.board[5] != "O" and main_app.board[5] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[5] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_5, 1, a_delay), 0)
-            #     self.o_5.opacity = 0
-            # else:
                 main_app.board[5] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_5, 1, a_delay), 0)
@@ -358,18 +313,10 @@ class Main_Screen(Screen):
 
         # 6th button
         if 0.633 < touch.spos[0] < 0.847 and 0.437 < touch.spos[1] < 0.567:
-            # if main_app.board[6] == "X":
-            #     main_app.board[6] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_6, 1, a_delay), 0)
-            #     self.o_6.opacity = 1
             if main_app.board[6] != "O" and main_app.board[6] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[6] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_6, 1, a_delay), 0)
-            #     self.o_6.opacity = 0
-            # else:
                 main_app.board[6] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_6, 1, a_delay), 0)
@@ -397,18 +344,10 @@ class Main_Screen(Screen):
 
         # 7th button
         if 0.15 < touch.spos[0] < 0.355 and 0.304 < touch.spos[1] < 0.423:
-            # if main_app.board[7] == "X":
-            #     main_app.board[7] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_7, 1, a_delay), 0)
-            #     self.o_7.opacity = 1
             if main_app.board[7] != "O" and main_app.board[7] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[7] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_7, 1, a_delay), 0)
-            #     self.o_7.opacity = 0
-            # else:
                 main_app.board[7] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_7, 1, a_delay), 0)
@@ -436,18 +375,10 @@ class Main_Screen(Screen):
 
         # 8th button
         if 0.380 < touch.spos[0] < 0.611 and 0.304 < touch.spos[1] < 0.423:
-            # if main_app.board[8] == "X":
-            #     main_app.board[8] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_8, 1, a_delay), 0)
-            #     self.o_8.opacity = 1
             if main_app.board[8] != "O" and main_app.board[8] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[8] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_8, 1, a_delay), 0)
-            #     self.o_8.opacity = 0
-            # else:
                 main_app.board[8] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_8, 1, a_delay), 0)
@@ -475,18 +406,10 @@ class Main_Screen(Screen):
 
         # 9th button
         if 0.633 < touch.spos[0] < 0.847 and 0.304 < touch.spos[1] < 0.423:
-            # if main_app.board[9] == "X":
-            #     main_app.board[9] = "O"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_9, 1, a_delay), 0)
-            #     self.o_9.opacity = 1
             if main_app.board[9] != "O" and main_app.board[9] != "X" and self.turn == "player":
                 if main_app.select:
                     main_app.select.stop()
                 main_app.select.play()
-            #     main_app.board[9] = "X"
-            #     Clock.schedule_once(partial(self.set_opacity, self.x_9, 1, a_delay), 0)
-            #     self.o_9.opacity = 0
-            # else:
                 main_app.board[9] = "X"
                 Clock.schedule_once(
                     partial(self.set_opacity, self.x_9, 1, a_delay), 0)
@@ -530,11 +453,6 @@ class Win_Screen(Screen):
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
-        # if touch.spos[1]<0.118:
-        # print(touch.spos)
-        # if self.collide_point(*touch.pos):
-        #     print("Touch down")
-        #     return False
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
@@ -557,11 +475,6 @@ class Lose_Screen(Screen):
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
-        # if touch.spos[1]<0.118:
-        # print(touch.spos)
-        # if self.collide_point(*touch.pos):
-        #     print("Touch down")
-        #     return False
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
@@ -584,11 +497,6 @@ class Tie_Screen(Screen):
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
-        # if touch.spos[1]<0.118:
-        # print(touch.spos)
-        # if self.collide_point(*touch.pos):
-        #     print("Touch down")
-        #     return False
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
@@ -611,11 +519,6 @@ class Intro_Screen(Screen):
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
-        # if touch.spos[1]<0.118:
-        # print(touch.spos)
-        # if self.collide_point(*touch.pos):
-        #     print("Touch down")
-        #     return False
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
@@ -640,7 +543,6 @@ class MainApp(App):
         self.board = [' '] * 10
 
     def build(self):
-        #Window.size = (540, 960)
         app = App.get_running_app()
         self.app_start = SoundLoader.load('assets/sounds/app_start.wav')
         self.app_start.volume = 0.8
